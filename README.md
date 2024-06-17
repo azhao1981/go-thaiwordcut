@@ -8,14 +8,16 @@ A simple Thai word segmentation written in Golang, based on Maximum Matching alg
 ## Installation
 
 ```bash
-go get github.com/narongdejsrn/go-thaiwordcut
+go get github.com/azhao1981/go-thaiwordcut
 ```
 
 ## Usage
 ```golang
-import "github.com/narongdejsrn/go-thaiwordcut"
+import (
+  thai "github.com/azhao1981/go-thaiwordcut"
+)
 
-segmenter := gothaiwordcut.Wordcut()
+segmenter := thai.Wordcut()
 segmenter.LoadDefaultDict()
 result := segmenter.Segment("ทดสอบการตัดคำภาษาไทย")
 ```

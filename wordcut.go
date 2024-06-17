@@ -1,30 +1,27 @@
 package gothaiwordcut
 
 import (
-	"github.com/armon/go-radix"
-	"os"
 	"bufio"
+	"embed"
 	"regexp"
-	"runtime"
-	"path"
+	"strings"
+
+	"github.com/armon/go-radix"
 )
+
+//go:embed dict/*.txt
+var lexitronTxt embed.FS
 
 // Segmenter : Segmenter main class
 type Segmenter struct {
 	Tree *radix.Tree
-
-	minLength int
 }
 
 // Option : Option for Segmenter
 type Option func(*Segmenter)
 
-func (w *Segmenter) loadFileIntoTrie(filePath string) {
-	f, err := os.Open(filePath)
-	check(err)
-	defer f.Close()
-
-	scanner := bufio.NewScanner(f)
+func (w *Segmenter) loadFileIntoTrie(data string) {
+	scanner := bufio.NewScanner(strings.NewReader(data))
 	for scanner.Scan() {
 		w.Tree.Insert(scanner.Text(), 1)
 	}
@@ -88,8 +85,11 @@ func Wordcut(options ...Option) *Segmenter {
 
 // LoadDefaultDict : load dictionary into trie
 func (w *Segmenter) LoadDefaultDict() {
-	_, filename, _, _ := runtime.Caller(0)
-	w.loadFileIntoTrie(path.Dir(filename) + "/dict/lexitron.txt")
+	txtByte, err := lexitronTxt.ReadFile("dict/lexitron.txt")
+	if err != nil {
+		panic(err)
+	}
+	w.loadFileIntoTrie(string(txtByte))
 }
 
 /*

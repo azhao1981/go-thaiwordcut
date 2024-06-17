@@ -1,9 +1,10 @@
 package gothaiwordcut
 
 import (
+	"os"
 	"testing"
+
 	"github.com/stretchr/testify/assert"
-	"io/ioutil"
 )
 
 func TestPureThaiCut(t *testing.T) {
@@ -24,7 +25,7 @@ func BenchmarkWordcut(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		segmenter := Wordcut()
 		segmenter.LoadDefaultDict()
-		dat, _ := ioutil.ReadFile("./dict/benchmark_text.txt")
+		dat, _ := os.ReadFile("./dict/benchmark_text.txt")
 		segmenter.Segment(string(dat))
 	}
 }
